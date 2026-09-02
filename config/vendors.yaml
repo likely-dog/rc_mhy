@@ -1,0 +1,38 @@
+vendors:
+  - code: ads_system_a
+    endpoint: "https://vendor-a.example.com/notify"
+    method: POST
+    timeout_seconds: 5
+    event_types: [user_registered]
+    headers:
+      Authorization: "Bearer ${ADS_A_TOKEN}"
+      Content-Type: "application/json"
+    body_template: |
+      {
+        "uid": "{{ payload.user_id }}",
+        "campaign": "{{ payload.campaign_id }}",
+        "ts": "{{ payload.timestamp }}"
+      }
+
+  - code: crm_system_b
+    endpoint: "https://crm.example.com/v1/contacts/{{ payload.contact_id }}"
+    method: PATCH
+    timeout_seconds: 8
+    event_types: [subscription_paid]
+    headers:
+      X-API-Key: "${CRM_B_KEY}"
+      Content-Type: "application/json"
+    body_template: |
+      {"status": "paid"}
+
+  # Only for the documented local Docker smoke test. The standard-library fake
+  # vendor runs on the host and is reachable from Docker Desktop by this name.
+  - code: smoke_vendor
+    endpoint: "http://host.docker.internal:18080/notify"
+    method: POST
+    timeout_seconds: 2
+    event_types: [smoke]
+    headers:
+      Content-Type: "application/json"
+    body_template: |
+      {"message": "{{ payload.message }}"}
