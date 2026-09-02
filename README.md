@@ -1,4 +1,4 @@
-# API 通知中转服务(codex生成，agent调用思路等信息见思路.md)
+# API 通知中转服务(codex生成，agent调用见设计信息.md)
 
 ## 1. 问题理解
 
